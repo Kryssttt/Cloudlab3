@@ -4,7 +4,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using System;
 using System.Windows;
-
+using Azure.Storage.Blobs;
 namespace DesctopContactApp
 {
     /// <summary>
@@ -12,7 +12,8 @@ namespace DesctopContactApp
     /// </summary>
     public partial class NewContactWindow : Window
     {
-        private static string _connectionString = "DefaultEndpointsProtocol=https;AccountName=mycontactapp;AccountKey=NX6s/z9BwCcZwP/Wl8ngHsA7+eb+SAaooXvYqKlupkXcIMQP/Y0tpJ1TTUPIC0WHnEu+yKiH7UK/+AStYn3OOQ==;EndpointSuffix=core.windows.net";
+        private static string _connectionString = "DefaultEndpointsProtocol=https;AccountName=nestorcontactsapp;AccountKey=9cqapxualBJB83MLUD9pXN28Y5xsI33vflXKgyF1feBCFSeAKMysZkr4wVQUlSHw2gad0nLz0PdM+AStpBS+pA==;EndpointSuffix=core.windows.net";
+        private static string _imagescontainer = "images";
 
         public NewContactWindow()
         {
@@ -21,47 +22,55 @@ namespace DesctopContactApp
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
         }
 
+        private bool checkInput()
+        {
+            return (nameTextBox.Text.Length > 0) && (surnameTextBox.Text.Length > 0) &&
+                (PatronymicTextBox.Text.Length > 0) && (addressTextBox.Text.Length > 0) && (phoneTextBox.Text.Length > 0);
+        }
+
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
 
-
-            var storageAccount = CloudStorageAccount.Parse(_connectionString);
-
-            var tableClient = storageAccount.CreateCloudTableClient();
-
-            var table = tableClient.GetTableReference("contact");
-
-            await table.CreateIfNotExistsAsync();
-
-
-            Contact contact = new Contact()
+            if (checkInput())
             {
-                PartitionKey = Guid.NewGuid().ToString(),
-                RowKey = Guid.NewGuid().ToString(),
-                Name = nameTextBox.Text,
-                SurName = surnameTextBox.Text,
-                Patronymic = PatronymicTextBox.Text,
-                Address = addressTextBox.Text,
-                Phone = phoneTextBox.Text
+                var storageAccount = CloudStorageAccount.Parse(_connectionString);
 
-            };
+                var tableClient = storageAccount.CreateCloudTableClient();
+
+                var table = tableClient.GetTableReference("contact");
+
+                await table.CreateIfNotExistsAsync();
 
 
+                Contact contact = new Contact()
+                {
+                    PartitionKey = Guid.NewGuid().ToString(),
+                    RowKey = Guid.NewGuid().ToString(),
+                    Name = nameTextBox.Text,
+                    SurName = surnameTextBox.Text,
+                    Patronymic = PatronymicTextBox.Text,
+                    Address = addressTextBox.Text,
+                    Phone = phoneTextBox.Text
 
-            string contactJson = JsonConvert.SerializeObject(contact);
-
-
-            var contactEntity = new DynamicTableEntity(contact.PartitionKey, contact.RowKey);
-            contactEntity.Properties.Add("Contact", EntityProperty.GeneratePropertyForString(contactJson));
+                };
 
 
 
-            var insertOperation = TableOperation.InsertOrReplace(contactEntity);
-            await table.ExecuteAsync(insertOperation);
+                string contactJson = JsonConvert.SerializeObject(contact);
 
-            if (Owner is MainWindow mainWindow)
-            {
-                mainWindow.ReadDatabase();
+
+                var contactEntity = new DynamicTableEntity(contact.PartitionKey, contact.RowKey);
+                contactEntity.Properties.Add("Contact", EntityProperty.GeneratePropertyForString(contactJson));
+
+
+
+                var insertOperation = TableOperation.InsertOrReplace(contactEntity);
+                await table.ExecuteAsync(insertOperation);
+
+                if (Owner is MainWindow mainWindow)
+                {
+                    mainWindow.ReadDatabase();
+                }
             }
             Close();
         }

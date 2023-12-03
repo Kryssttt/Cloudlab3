@@ -35,7 +35,7 @@
             <TextBlock Text="Address"
                                        FontSize="15"    
                                         x:Name ="AddressTextBlock"
-                                       Foreground="DodgerBlue"/>
+                                       Foreground="DarkOrange"/>
             <TextBlock Text="123 456 7889"
                                        FontSize="20"
                         x:Name ="phoneTextBlock"

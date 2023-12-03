@@ -10,13 +10,13 @@
         Title="ContactDetails" Height="500" Width="350">
     <Grid>
         <StackPanel Margin="10px">
-            <Label>Name:</Label>
+            <Label>First name:</Label>
             <TextBox x:Name="nameTextBox"
                      Margin="0,0,0,5"/>
-            <Label>Surname:</Label>
+            <Label>Middle name:</Label>
             <TextBox x:Name="SurNameTextBox"        
                      Margin="0,0,0,5"/>
-            <Label>Patronymic:</Label>
+            <Label>Last name:</Label>
             <TextBox x:Name="PatronymicTextBox"           
                      Margin="0,0,0,5"/>
             <Label>Address:</Label>
@@ -28,11 +28,12 @@
            
             <Button Content="Update"
                     x:Name="updateButton"
+                    Background="DarkSeaGreen"
                     Click="updateButton_Click"/>
             <Button Margin="0,5,0,5"
                     Content="Delete"
                     x:Name="deleteButton"
-                    Background="Red"
+                    Background="DarkRed"
                     Click="deleteButton_Click"
                     Foreground="White"/>
         </StackPanel>

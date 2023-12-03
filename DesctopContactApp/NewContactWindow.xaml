@@ -11,13 +11,13 @@
    
     <Grid>
         <StackPanel Margin="10px">
-            <Label>Name:</Label>
+            <Label>First name:</Label>
             <TextBox x:Name="nameTextBox"
                      Margin="0,0,0,5"/>
-            <Label>Surname:</Label>
+            <Label>Second name:</Label>
             <TextBox x:Name="surnameTextBox"    
                      Margin="0,0,0,5"/>
-            <Label>Patronymic:</Label>
+            <Label>Last name:</Label>
             <TextBox x:Name="PatronymicTextBox"    
                      Margin="0,0,0,5"/>
 
@@ -28,6 +28,7 @@
             <TextBox x:Name="phoneTextBox" 
                      Margin="0,0,0,5"/>
             <Button Content="Save"
+                    Background="Aquamarine"
                     Click="Button_Click"/>
         </StackPanel>
     </Grid>
